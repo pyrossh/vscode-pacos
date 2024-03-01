@@ -1,0 +1,319 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Pacos",
+  "patterns": [
+    {
+      "include": "#module_name"
+    },
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#entity"
+    }
+  ],
+  "repository": {
+    "module_name": {
+      "patterns": [
+        {
+          "comment": "module name",
+          "begin": "\\b(module)\\s+",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.module.pacos"
+            }
+          },
+          "end": "(?!\\G)",
+          "patterns": [
+            {
+              "match": "\\d\\w*",
+              "name": "invalid.illegal.identifier.pacos"
+            },
+            {
+              "match": "\\w+",
+              "name": "entity.name.type.module.pacos"
+            }
+          ]
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.pacos",
+          "match": "//.*"
+        },
+        {
+          "name": "string.quoted.triple.pacos",
+          "match": "`.*"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.pacos",
+          "match": "\\b(trait|enum|type|import|where|module|static|operator|assert)\\b"
+        },
+        {
+          "name": "keyword.control.jump.pacos",
+          "match": "\\b(break|continue|return)\\b"
+        },
+        {
+          "name": "keyword.other.builtin-type.pacos",
+          "match": "\\b(bool|byte|int|float|dec|any|error)\\b"
+        },
+        {
+          "name": "entity.name.type.pacos",
+          "match": "\\b(str)\\b"
+        },
+        {
+          "name": "keyword.control.pacos",
+          "match": "\\b(match|if|else|while|for|range)\\b"
+        },
+        {
+          "match": "\\bconst\\b",
+          "name": "keyword.const.pacos"
+        },
+        {
+          "comment": "struct keyword",
+          "name": "keyword.declaration.struct.pacos storage.type.pacos",
+          "match": "\\b(struct)\\b"
+        },
+        {
+          "match": "\\bfn\\b",
+          "name": "keyword.function.pacos"
+        },
+        {
+          "name": "keyword.operator.arrow.pacos",
+          "match": "(<\\-|\\->)"
+        },
+        {
+          "name": "keyword.operator.pipe.pacos",
+          "match": "\\|>"
+        },
+        {
+          "name": "keyword.operator.splat.pacos",
+          "match": "\\.\\."
+        },
+        {
+          "name": "keyword.operator.comparison.float.pacos",
+          "match": "(<=\\.|>=\\.|==\\.|!=\\.|<\\.|>\\.)"
+        },
+        {
+          "name": "keyword.operator.comparison.int.pacos",
+          "match": "(<=|>=|==|!=|<|>)"
+        },
+        {
+          "name": "keyword.operator.logical.pacos",
+          "match": "(&&|\\|\\|)"
+        },
+        {
+          "name": "keyword.operator.string.pacos",
+          "match": "<>"
+        },
+        {
+          "name": "keyword.operator.other.pacos",
+          "match": "\\|"
+        },
+        {
+          "name": "keyword.operator.arithmetic.float.pacos",
+          "match": "(\\+\\.|\\-\\.|/\\.|\\*\\.|%\\.)"
+        },
+        {
+          "name": "keyword.operator.arithmetic.int.pacos",
+          "match": "(\\+|\\-|/|\\*|%)"
+        },
+        {
+          "name": "keyword.operator.assignment.pacos",
+          "match": "="
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "comment": "double-quoted strings and byte strings",
+          "name": "string.quoted.double.pacos",
+          "begin": "(b?)(\")",
+          "beginCaptures": {
+            "1": {
+              "name": "string.quoted.byte.raw.pacos"
+            },
+            "2": {
+              "name": "punctuation.definition.string.pacos"
+            }
+          },
+          "end": "\"",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.pacos"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#escapes"
+            },
+            {
+              "include": "#interpolations"
+            }
+          ]
+        },
+        {
+          "comment": "characters and bytes",
+          "name": "string.quoted.single.char.pacos",
+          "begin": "(b)?(')",
+          "beginCaptures": {
+            "1": {
+              "name": "string.quoted.byte.raw.pacos"
+            },
+            "2": {
+              "name": "punctuation.definition.char.pacos"
+            }
+          },
+          "end": "'",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.char.pacos"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#escapes"
+            }
+          ]
+        }
+      ]
+    },
+    "escapes": {
+      "comment": "escapes: ASCII, byte, Unicode, quote, regex",
+      "name": "constant.character.escape.pacos",
+      "match": "(\\\\)(?:(?:(x[0-7][\\da-fA-F])|(u(\\{)[\\da-fA-F]{4,6}(\\}))|.))",
+      "captures": {
+        "1": {
+          "name": "constant.character.escape.backslash.pacos"
+        },
+        "2": {
+          "name": "constant.character.escape.bit.pacos"
+        },
+        "3": {
+          "name": "constant.character.escape.unicode.pacos"
+        },
+        "4": {
+          "name": "constant.character.escape.unicode.punctuation.pacos"
+        },
+        "5": {
+          "name": "constant.character.escape.unicode.punctuation.pacos"
+        }
+      }
+    },
+    "interpolations": {
+      "comment": "curly brace interpolations",
+      "begin": "\\$\\{",
+      "captures": {
+        "0": {
+          "name": "punctuation.section.embedded.pacos"
+        }
+      },
+      "end": "\\}",
+      "name": "source.pacos.embedded.source",
+      "patterns": [
+        {
+          "include": "#entity"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.other.pacos",
+          "match": "\\b[Ss]elf\\b"
+        },
+        {
+          "name": "variable.language.self.pacos",
+          "match": "\\b[Ss]elf\\b"
+        },
+        {
+          "include": "#binary_number"
+        },
+        {
+          "include": "#octal_number"
+        },
+        {
+          "include": "#hexadecimal_number"
+        },
+        {
+          "include": "#decimal_number"
+        },
+        {
+          "include": "#boolean"
+        },
+        {
+          "name": "entity.name.type.pacos",
+          "match": "[[:upper:]][[:word:]]*"
+        }
+      ]
+    },
+    "binary_number": {
+      "name": "constant.numeric.binary.pacos",
+      "match": "\\b0b[0-1]+\\b",
+      "patterns": []
+    },
+    "octal_number": {
+      "name": "constant.numeric.octal.pacos",
+      "match": "\\b0o[0-7]+\\b",
+      "patterns": []
+    },
+    "decimal_number": {
+      "name": "constant.numeric.decimal.pacos",
+      "match": "\\b[[:digit:]][[:digit:]_]*(\\.[[:digit:]]*)?\\b",
+      "patterns": []
+    },
+    "hexadecimal_number": {
+      "name": "constant.numeric.hexadecimal.pacos",
+      "match": "\\b0x[[:xdigit:]]+\\b",
+      "patterns": []
+    },
+    "boolean": {
+      "name": "constant.language.boolean.pacos",
+      "match": "\\b(true|false)\\b",
+      "patterns": []
+    },
+    "entity": {
+      "patterns": [
+        {
+          "begin": "\\b([[:lower:]][[:word:]]*)([[:space:]]*)?\\(",
+          "end": "\\)",
+          "patterns": [
+            {
+              "include": "$self"
+            }
+          ],
+          "captures": {
+            "1": {
+              "name": "entity.name.function.pacos"
+            }
+          }
+        },
+        {
+          "name": "variable.parameter.pacos",
+          "match": "\\b([[:lower:]][[:word:]]*):\\s"
+        },
+        {
+          "name": "entity.name.namespace.pacos",
+          "match": "\\b([[:lower:]][[:word:]]*):"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.pc"
+}

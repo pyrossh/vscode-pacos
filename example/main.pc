@@ -1,0 +1,61 @@
+module std
+
+import std/list
+import std/map
+import std/str
+import std/math
+
+trait Compare where
+  fn compareTo()
+
+enum Shape where
+  Circle(int)
+  Square(int)
+  Rectangle(int, int)
+
+struct Cat(name: str, age: int): Result[Self, Error] =
+  `A cat is new a new type of animal
+  self.name = name
+  self.age = age
+  self.connect()
+  self.flag = true
+  self.data = Some("123")
+  a := 123
+
+static fn Cat.withName(name: str): Cat =
+  Cat(name: name, age: 0)
+
+fn Cat.fullname(): str =
+  self.name + self.age.toStr()
+
+fn Cat.talk() =
+  printLn("cat ${name} says meow\n\\n \t")
+
+fn Cat.toStr(): str =
+  "Cat<${fullname()}, ${age}>"
+
+operator fn Cat.plus(b: Cat): Cat =
+  Cat(..self, age: self.age + b.age) // we copy the Cat attributes
+
+#[builder]     // builder derive
+struct Response(): Self =
+  self._body = Buffer()
+  self._headers = Map[str, str]()
+  self._status = 0
+
+#[get("/posts")]
+fn handleRequest(req: Request): Response =
+  Response()
+    .status(2)
+    .body("213")
+    .headers("1" => "2")
+
+fn hasFlag(b: bool, d: List) =
+  return data
+
+fn iterate() =
+  for i := range items
+    if i == 5
+      continue
+    if i == 10
+      break
