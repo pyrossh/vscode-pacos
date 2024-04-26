@@ -53,7 +53,7 @@
           "match": "//.*"
         },
         {
-          "name": "string.quoted.triple.pacos",
+          "name": "comment.block.documentation.pacos",
           "match": "`.*"
         }
       ]
@@ -62,7 +62,7 @@
       "patterns": [
         {
           "name": "keyword.control.pacos",
-          "match": "\\b(trait|enum|type|import|where|module|static|operator|assert)\\b"
+          "match": "\\b(trait|enum|type|import|where|module|static|operator|assert|pub|priv|override)\\b"
         },
         {
           "name": "keyword.control.jump.pacos",
@@ -78,16 +78,20 @@
         },
         {
           "name": "keyword.control.pacos",
-          "match": "\\b(match|if|else|while|for|range)\\b"
+          "match": "\\b(match|if|else|while|for)\\b"
+        },
+        {
+          "name": "keyword.control.pacos",
+          "match": "\\brange\\b"
         },
         {
           "match": "\\bconst\\b",
           "name": "keyword.const.pacos"
         },
         {
-          "comment": "struct keyword",
-          "name": "keyword.declaration.struct.pacos storage.type.pacos",
-          "match": "\\b(struct)\\b"
+          "comment": "record keyword",
+          "name": "keyword.declaration.record.pacos storage.type.pacos",
+          "match": "\\b(record|fd|is|field)\\b"
         },
         {
           "match": "\\bfn\\b",

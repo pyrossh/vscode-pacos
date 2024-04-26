@@ -1,47 +1,54 @@
 module std
 
-import std/list
-import std/map
-import std/str
-import std/math
+import std.{List, Map, math}
 
-trait Compare where
-  fn compareTo()
+trait Comparable is Eq where
+  fn compareTo(other: T): Compare
 
 enum Shape where
   Circle(int)
   Square(int)
   Rectangle(int, int)
 
-struct Cat(name: str, age: int): Result[Self, Error] =
+record Cat(name: str, age:  int) =
   `A cat is new a new type of animal
-  self.name = name
-  self.age = age
-  self.connect()
-  self.flag = true
-  self.data = Some("123")
-  a := 123
 
-static fn Cat.withName(name: str): Cat =
-  Cat(name: name, age: 0)
+  static fn withName(name: str): Cat =
+    Cat(name: name, age: 0)
 
-fn Cat.fullname(): str =
-  self.name + self.age.toStr()
+  fn fullname(): str =
+    name + age.toStr()
 
-fn Cat.talk() =
-  printLn("cat ${name} says meow\n\\n \t")
+  fn talk() =
+    printLn("cat ${name} says meow")
 
-fn Cat.toStr(): str =
-  "Cat<${fullname()}, ${age}>"
+  override fn toStr(): str =
+    "Cat<${fullname()}, ${age}>"
 
-operator fn Cat.plus(b: Cat): Cat =
-  Cat(..self, age: self.age + b.age) // we copy the Cat attributes
+  override fn plus(other: Cat) Cat =
+    Cat(...self, age: self.age + other.age)
 
-#[builder]     // builder derive
-struct Response(): Self =
-  self._body = Buffer()
-  self._headers = Map[str, str]()
-  self._status = 0
+  override fn toStr() str =
+    "Cat<${fullname()}, ${age}>"
+
+record Response(
+  body: Buffer
+  headers: Map[str, str]
+  status: int
+) where
+  fn init()
+    body = Buffer()
+    headers = Map[str, str]()
+    status = 0
+
+  fn header(kv Pair): Self =
+    headers.add(kv)
+
+  fn body(b Buffer): Self =
+    body = b
+
+  fn status(v int): Self =
+    status = v
 
 #[get("/posts")]
 fn handleRequest(req: Request): Response =
@@ -59,3 +66,55 @@ fn iterate() =
       continue
     if i == 10
       break
+
+`Option is a type that represents either value present Some or nothing present
+enum Option[T] where
+  | None
+  | Some(T)
+
+  fn isNone(): Option[T] =
+    match self
+      None -> true
+      Some(t) -> false
+
+  fn isSome(): Option[T] =
+    !self.isNone()
+
+  fn get(): T =
+    match self
+      Some(val) -> val
+      None -> fail("called 'option.get()' on a 'none' value")
+
+  fn getOrElse(default: T): T =
+    `get if present otherwise return default value
+    match self
+      Some(val) -> val
+      None -> d
+
+  fn toStr(): str =
+    match self
+      Some(v) -> v.toStr()
+      None -> "none"
+
+trait RangebleV where
+  fn rangeV[V](yield: fn(V): bool): bool
+
+trait RangebleKV where  
+  fn rangeKV[K, V](yield: fn(K, V): bool): bool
+
+record Tree[E](
+  value: E
+  left: Option[Tree] = None
+  right: Option[Tree] = None
+) where
+  fn rangeV(yld: fn(E): bool): bool =
+    t.left?.rangeV(yld) && yld(t.val) && t.right?.rangeV(yld)
+
+let tree = Tree(
+  value: 10,
+  left: Tree(20, Tree(30), Tree(39)),
+  right: Tree(40),
+)
+
+for t := range tree:
+  printLn(v)
